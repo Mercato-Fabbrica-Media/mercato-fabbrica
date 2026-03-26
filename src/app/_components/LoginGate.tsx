@@ -14,7 +14,7 @@ export default function LoginGate({ children }: LoginGateProps) {
   useEffect(() => {
     async function checkAuth() {
       try {
-        const res = await fetch("/api/auth/check");
+        const res = await fetch("/api/account/check");
         if (res.ok) {
           sessionStorage.setItem("isLogin", "true");
           setCanRender(true);
