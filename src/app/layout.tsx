@@ -5,7 +5,6 @@ import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import Header from "~/app/_components/Header";
-import { auth } from "~/server/auth";
 
 export const metadata: Metadata = {
   title: "Mercato Fabbrica",

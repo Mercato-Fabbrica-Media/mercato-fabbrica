@@ -22,7 +22,7 @@ function toHtmlLines(text?: string | null): string {
     .map((line) => {
       const styled = styleConnectors(line);
       // Uppercase only the parts outside connector spans
-      return `<div>${styled.replace(/(<span[^>]*>.*?<\/span>)|([^<]+)/g, (m, span, txt) => span ? span : txt.toUpperCase())}</div>`;
+      return `<div>${styled.replace(/(<span[^>]*>.*?<\/span>)|([^<]+)/g, (_m: string, span: string | undefined, txt: string | undefined) => span ?? (txt?.toUpperCase() ?? ""))}</div>`;
     })
     .join("");
 }

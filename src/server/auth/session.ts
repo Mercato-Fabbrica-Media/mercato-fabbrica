@@ -1,5 +1,4 @@
 import "server-only";
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument */
 import { cookies } from "next/headers";
 
 const ACCOUNT_ID_COOKIE = "rails_account_id";
