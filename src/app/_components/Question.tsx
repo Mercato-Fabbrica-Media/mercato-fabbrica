@@ -152,7 +152,7 @@ export default function Question({
   const inputClasses = `font-sackers-gothic w-full border-0 border-b-2 md:border-b-2 border-black bg-transparent md:pb-1 md:text-[20px] font-light tracking-[0.02em] text-black lowercase placeholder-black focus:border-black focus:outline-none text-[10px] antialiased`
 
   return (
-    <div className="bg-[#e8e5e0] md:px-16 md:py-16 md:pt-[42px] px-4 py-4 pt-5">
+    <div className="bg-[#e8e5e0] md:px-16 md:py-16 md:pt-[42px] px-4 py-4 pt-5 md:min-h-[1060px]">
       <div className="mx-auto">
         <div className="md:mb-12 mb-5">
           <h1 className="font-sucker-heavy md:mb-12 md:text-[28px] text-black mb-[18px] text-[14px] leading-[18px] md:leading-[32px] tracking-[0] antialiased md:-tracking-[1.5px]">

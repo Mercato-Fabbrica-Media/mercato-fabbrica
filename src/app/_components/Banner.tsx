@@ -21,7 +21,7 @@ export default function Banner({
   totalQuestions
 }: BannerProps) {
   return (
-    <div className="relative w-full pb-[20px] md:pb-[32px] min-h-[280px] h-[calc(75vw_-_20px)] md:h-[calc(56vw)] lg:min-h-[600px] flex items-center justify-center overflow-hidden">
+    <div className="relative w-full pb-[20px] md:pb-[32px] min-h-[280px] h-[calc(75vw_-_20px)] md:h-[850px] flex items-center justify-center overflow-hidden">
       <div className="relative w-full h-full banner-container">
         {mainImageSrc && <div className="absolute left-0 top-0 w-full h-full z-0">
           <Image
