@@ -41,7 +41,7 @@ function parseOptions(options?: string | null): string[] {
 function sentenceCase(text?: string | null): string | undefined {
   if (!text) return text ?? undefined;
 
-  const trimmed = text.trim();
+  const trimmed = text.replace(/\\r\\n|\\r|\\n/g, "").trim();
   if (!trimmed) return undefined;
 
   return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
