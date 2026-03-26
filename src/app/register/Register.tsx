@@ -1,12 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-interface CsrfResponse {
-  csrf: string;
-  csrfToken?: string;
-}
 
 interface AuthResponse {
   error?: string;
@@ -22,43 +17,7 @@ const Register = () => {
     password: "",
     newsletter: false,
   });
-
-  const [csrfToken, setCsrfToken] = useState<string>("");
-
-  useEffect(() => {
-    void getCSRFToken();
-  }, []);
-
-  async function getCSRFToken(): Promise<void> {
-    // try {
-    //   const res = await fetch("/api/auth/csrf", { method: "GET" });
-    //   const { csrf }: CsrfResponse = await res.json();
-    //   window.localStorage.setItem("csrf", csrf ?? "");
-    //   setCsrfToken(csrf ?? "");
-    // } catch (err) {
-    //   console.error("Failed to fetch CSRF token:", err);
-    // }
-
-    try {
-      const res = await fetch("/api/auth/csrf", { method: "GET" });
-      const json: unknown = await res.json();
-      if (typeof json === "object" && json !== null) {
-        const data = json as CsrfResponse;
-        const token =
-          typeof data.csrf === "string"
-            ? data.csrf
-            : typeof data.csrfToken === "string"
-              ? data.csrfToken
-              : "";
-        if (token) {
-          window.localStorage.setItem("csrf", token);
-          setCsrfToken(token);
-        }
-      }
-    } catch (err) {
-      console.error("Failed to fetch CSRF token:", err);
-    }
-  }
+  const [error, setError] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -69,33 +28,8 @@ const Register = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    // e.preventDefault();
-    
-    // console.log("Form submitted:", formData);
-
-    // try {
-    //   const resp = await fetch("/api/auth/login", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       email: formData.email,
-    //       password: formData.password,
-    //       firstName: formData.firstName,
-    //       lastName: formData.lastName,
-    //       csrfToken,
-    //     }),
-    //   });
-
-    //   const data: AuthResponse = await resp.json();
-    //   if (!resp.ok) throw new Error(data.error ?? "Login failed");
-
-    //   router.push("/login");
-    // } catch (err) {
-    //   console.error("Registration failed:", err);
-    // }
-
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    setError("");
 
     try {
       const resp = await fetch("/api/auth/register", {
@@ -106,21 +40,22 @@ const Register = () => {
           password: formData.password,
           firstName: formData.firstName,
           lastName: formData.lastName,
-          ...(csrfToken ? { csrf: csrfToken } : {}),
         }),
       });
 
-      const json: unknown = await resp.json(); // unknown first
+      const json: unknown = await resp.json();
       if (typeof json === "object" && json !== null) {
         const data = json as AuthResponse;
-        if (!resp.ok) throw new Error(data.error ?? "Login failed");
+        if (!resp.ok) throw new Error(data.error ?? "Registration failed");
       } else {
-        throw new Error("Invalid login response");
+        throw new Error("Invalid response");
       }
 
-      router.push("/login");
+      sessionStorage.setItem("isLogin", "true");
+      router.push("/question");
     } catch (err) {
-      console.error("Registration failed:", err);
+      if (err instanceof Error) setError(err.message);
+      else setError("Unexpected error occurred");
     }
   };
 
@@ -132,8 +67,9 @@ const Register = () => {
             register
           </h2>
 
+          {error && <p className="text-red-600 text-[10px] mb-2">{error}</p>}
+
           <div className="md:flex md:gap-20">
-            {/* First Name */}
             <div className="flex flex-col mb-4 md:mb-3 gap-2 md:w-1/2">
               <input
                 type="text"
@@ -145,8 +81,6 @@ const Register = () => {
                 className="antialiased input-custom-border rounded-none border-0 bg-transparent px-0 py-1 md:py-2 text-[12px] md:text-[21px] font-normal text-[#0A0909] placeholder-black focus:ring-0 focus:outline-none"
               />
             </div>
-
-            {/* Last Name */}
             <div className="flex flex-col mb-4 md:mb-3 gap-2 md:w-1/2">
               <input
                 type="text"
@@ -161,7 +95,6 @@ const Register = () => {
           </div>
 
           <div className="md:flex md:gap-20">
-            {/* Email */}
             <div className="flex flex-col mb-4 md:mb-0 gap-2 md:w-1/2">
               <input
                 type="email"
@@ -173,8 +106,6 @@ const Register = () => {
                 className="antialiased input-custom-border rounded-none border-0 bg-transparent px-0 py-1 md:py-2 text-[12px] md:text-[21px] font-normal text-[#0A0909] placeholder-black focus:ring-0 focus:outline-none"
               />
             </div>
-
-            {/* Password */}
             <div className="flex flex-col mb-4 md:mb-0 gap-2 md:w-1/2">
               <input
                 type="password"
@@ -188,7 +119,6 @@ const Register = () => {
             </div>
           </div>
 
-          {/* Newsletter */}
           <div className="mb-0 flex items-start space-x-2 md:mt-6">
             <input
               type="checkbox"
@@ -206,12 +136,13 @@ const Register = () => {
             </label>
           </div>
 
-          {/* Confidentiality Note */}
           <div className="pt-0 md:relative md:-top-[15px]">
-            <p className="cursor-pointer md:text-[20px] leading-normal font-medium tracking-[0.03rem] text-[#0A0909] text-[8px]">by clicking on &apos;create a membership&apos;, you accept our confidentiality policies</p>
+            <p className="cursor-pointer md:text-[20px] leading-normal font-medium tracking-[0.03rem] text-[#0A0909] text-[8px]">
+              by clicking on &apos;create a membership&apos;, you accept our
+              confidentiality policies
+            </p>
           </div>
 
-          {/* Submit */}
           <div className="pt-4">
             <button
               type="submit"
@@ -221,7 +152,6 @@ const Register = () => {
             </button>
           </div>
 
-          {/* Already have membership */}
           <div className="pt-4 text-center">
             <p className="text-[10px] leading-normal md:text-[20px] font-bold tracking-[0.12em] text-black uppercase hover:underline">
               already have a membership?

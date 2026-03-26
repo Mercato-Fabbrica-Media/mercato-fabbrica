@@ -1,11 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-interface CsrfResponse {
-  csrf: string;
-  csrfToken?: string;
-}
 
 interface LoginResponse {
   error?: string;
@@ -16,45 +11,6 @@ export default function Login() {
   const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const { email, password } = form;
-  const [csrfToken, setCsrfToken] = useState<string>("");
-
-  useEffect(() => {
-    void getCSRFToken();
-  }, []);
-
-  async function getCSRFToken(): Promise<void> {
-    // try {
-    //   const res = await fetch("/api/auth/csrf", { method: "GET" });
-    //   if (!res.ok) throw new Error("Failed to fetch CSRF token");
-    //   const { csrf }: CsrfResponse = await res.json();
-    //   window.localStorage.setItem("csrf", csrf);
-    //   setCsrfToken(csrf);
-    // } catch (err) {
-    //   console.error("CSRF fetch error:", err);
-    //   setError("Failed to fetch CSRF token");
-    // }
-
-    try {
-      const res = await fetch("/api/auth/csrf", { method: "GET" });
-      const json: unknown = await res.json();
-      if (typeof json === "object" && json !== null) {
-        const data = json as CsrfResponse;
-        const token =
-          typeof data.csrf === "string"
-            ? data.csrf
-            : typeof data.csrfToken === "string"
-              ? data.csrfToken
-              : "";
-        if (token) {
-          window.localStorage.setItem("csrf", token);
-          setCsrfToken(token);
-        }
-      }
-    } catch (err) {
-      console.error("CSRF fetch error:", err);
-    }
-  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -64,13 +20,12 @@ export default function Login() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email,
-          password,
-          ...(csrfToken ? { csrf: csrfToken } : {}),
+          email: form.email,
+          password: form.password,
         }),
       });
 
-      const jsonData: unknown = await resp.json(); // unknown instead of any
+      const jsonData: unknown = await resp.json();
       if (typeof jsonData === "object" && jsonData !== null) {
         const data = jsonData as LoginResponse;
         if (!resp.ok) {
@@ -79,8 +34,8 @@ export default function Login() {
       } else {
         throw new Error("Invalid login response");
       }
-      
-      sessionStorage.setItem('isLogin', 'true');
+
+      sessionStorage.setItem("isLogin", "true");
       router.push("/question");
     } catch (err) {
       if (err instanceof Error) setError(err.message);
