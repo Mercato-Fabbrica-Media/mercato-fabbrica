@@ -9,7 +9,7 @@ function toHtmlLines(text?: string | null): string {
   if (!text) return "";
 
   return text
-    .split(/\r?\n/)
+    .split(/\r?\n|\\n/)
     .map((line) => line.trim())
     .filter(Boolean)
     .map((line) => `<div>${line.toUpperCase()}</div>`)
@@ -33,7 +33,7 @@ function parseOptions(options?: string | null): string[] {
   if (!options) return [];
 
   return options
-    .split(/\r?\n/)
+    .split(/\r?\n|\\n/)
     .map((line) => normalizeOption(line))
     .filter(Boolean);
 }
