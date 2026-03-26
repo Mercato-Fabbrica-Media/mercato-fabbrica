@@ -12,14 +12,23 @@ export default function LoginGate({ children }: LoginGateProps) {
   const [canRender, setCanRender] = useState(false);
 
   useEffect(() => {
-    const isLoggedIn = window.sessionStorage.getItem("isLogin") === "true";
-
-    if (!isLoggedIn) {
-      router.replace("/login");
-      return;
+    async function checkAuth() {
+      try {
+        const res = await fetch("/api/auth/check");
+        if (res.ok) {
+          sessionStorage.setItem("isLogin", "true");
+          setCanRender(true);
+        } else {
+          sessionStorage.removeItem("isLogin");
+          router.replace("/login");
+        }
+      } catch {
+        sessionStorage.removeItem("isLogin");
+        router.replace("/login");
+      }
     }
 
-    setCanRender(true);
+    void checkAuth();
   }, [router]);
 
   if (!canRender) {

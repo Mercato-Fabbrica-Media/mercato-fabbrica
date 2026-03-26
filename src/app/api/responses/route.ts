@@ -39,8 +39,10 @@ export async function POST(req: Request) {
     typeof payload.response === "string" && payload.response.length > 0
       ? payload.response.trim()
       : null;
-  const shareMore =
+  const MAX_SHARE_MORE = 5000;
+  const rawShareMore =
     typeof payload.shareMore === "string" ? payload.shareMore : "";
+  const shareMore = rawShareMore.slice(0, MAX_SHARE_MORE);
 
   const questionKey = BigInt(questionId);
 

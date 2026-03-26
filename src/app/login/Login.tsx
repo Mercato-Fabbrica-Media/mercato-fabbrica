@@ -85,7 +85,7 @@ export default function Login() {
 
           <div className="text-right mb-4 md:mb-2">
             <a
-              href="#"
+              href="/forgot-password"
               className="text-[8px] md:text-sm font-bold tracking-[0.12em] text-black uppercase hover:underline"
             >
               Forgot your password?

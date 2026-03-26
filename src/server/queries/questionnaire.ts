@@ -5,14 +5,25 @@ type NavigationFallback = {
   next: string;
 };
 
+function styleConnectors(line: string): string {
+  const CONNECTORS = /\b(and|with|in|of|on|or|the|for|to|through)\b/gi;
+  return line.replace(CONNECTORS, (match) => {
+    return `<span class="connector-word">${match.toLowerCase()}</span>`;
+  });
+}
+
 function toHtmlLines(text?: string | null): string {
   if (!text) return "";
 
   return text
-    .split(/\r?\n|\\n/)
+    .split(/\\r\\n|\\r|\\n|\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean)
-    .map((line) => `<div>${line.toUpperCase()}</div>`)
+    .map((line) => {
+      const styled = styleConnectors(line);
+      // Uppercase only the parts outside connector spans
+      return `<div>${styled.replace(/(<span[^>]*>.*?<\/span>)|([^<]+)/g, (m, span, txt) => span ? span : txt.toUpperCase())}</div>`;
+    })
     .join("");
 }
 

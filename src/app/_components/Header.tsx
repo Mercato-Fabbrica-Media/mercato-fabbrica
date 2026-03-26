@@ -1,11 +1,10 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect } from "react";
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 grid w-full items-center border-b border-gray-300 bg-[#eae7e2] px-4 md:px-16 py-[10px] md:py-[20px] max-xl:flex xl:grid-cols-3">
+    <header className="sticky top-0 z-50 grid w-full items-center border-b border-gray-300 bg-[#eae7e2] px-4 md:px-[72px] py-[10px] md:py-[20px] max-xl:flex xl:grid-cols-3">
       <div className="flex items-center gap-2">
         <Link href="/" className="no-underline">
           <div className="flex flex-col items-center">
@@ -85,7 +84,7 @@ export default function Header() {
           className="relative flex gap-2 hover:opacity-70"
         >
           <Image
-            src="/assets/images/Cart.svg"
+            src="/assets/images/Shopping_Cart.svg"
             alt="Cart"
             width={23}
             height={17}
