@@ -1,0 +1,230 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Central Avenue';
+  src: url('/fonts/CENTRAL AVENUE-20250821T135301Z-1-001/CENTRAL AVENUE/Web/central-avenue-bold.eot');
+  src: url('/fonts/CENTRAL AVENUE-20250821T135301Z-1-001/CENTRAL AVENUE/Web/central-avenue-bold.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/CENTRAL AVENUE-20250821T135301Z-1-001/CENTRAL AVENUE/Web/central-avenue-bold.woff2') format('woff2'),
+       url('/fonts/CENTRAL AVENUE-20250821T135301Z-1-001/CENTRAL AVENUE/Web/central-avenue-bold.woff') format('woff'),
+       url('/fonts/CENTRAL AVENUE-20250821T135301Z-1-001/CENTRAL AVENUE/Web/central-avenue-bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sackers Gothic';
+  src: url('/fonts/SACKERS GOTHIC-20250821T135303Z-1-001/SACKERS GOTHIC/Sackers Gothic Family/Monotype - SackersGothicStd-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sackers Gothic';
+  src: url('/fonts/SACKERS GOTHIC-20250821T135303Z-1-001/SACKERS GOTHIC/Sackers Gothic Family/Monotype - SackersGothicStd-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sackers Gothic';
+  src: url('/fonts/SACKERS GOTHIC-20250821T135303Z-1-001/SACKERS GOTHIC/Sackers Gothic Family/Monotype - SackersGothicStd-Heavy.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('/fonts/UNTITLED SANS-20250821T135304Z-1-001/UNTITLED SANS/UntitledSans-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('/fonts/UNTITLED SANS-20250821T135304Z-1-001/UNTITLED SANS/UntitledSans-LightItalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('/fonts/UNTITLED SANS-20250821T135304Z-1-001/UNTITLED SANS/UntitledSans-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('/fonts/UNTITLED SANS-20250821T135304Z-1-001/UNTITLED SANS/UntitledSans-RegularItalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('/fonts/UNTITLED SANS-20250821T135304Z-1-001/UNTITLED SANS/UntitledSans-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('/fonts/UNTITLED SANS-20250821T135304Z-1-001/UNTITLED SANS/UntitledSans-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('/fonts/UNTITLED SANS-20250821T135304Z-1-001/UNTITLED SANS/UntitledSans-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('/fonts/UNTITLED SANS-20250821T135304Z-1-001/UNTITLED SANS/UntitledSans-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('/fonts/UNTITLED SANS-20250821T135304Z-1-001/UNTITLED SANS/UntitledSans-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('/fonts/UNTITLED SANS-20250821T135304Z-1-001/UNTITLED SANS/UntitledSans-BlackItalic.otf') format('opentype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Serif';
+  src: url('/fonts/UNTITLED SERIF-20250821T135306Z-1-001/UNTITLED SERIF/DesktopFonts/UntitledSerif-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Serif';
+  src: url('/fonts/UNTITLED SERIF-20250821T135306Z-1-001/UNTITLED SERIF/DesktopFonts/UntitledSerif-RegularItalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Serif';
+  src: url('/fonts/UNTITLED SERIF-20250821T135306Z-1-001/UNTITLED SERIF/DesktopFonts/UntitledSerif-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Serif';
+  src: url('/fonts/UNTITLED SERIF-20250821T135306Z-1-001/UNTITLED SERIF/DesktopFonts/UntitledSerif-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Serif';
+  src: url('/fonts/UNTITLED SERIF-20250821T135306Z-1-001/UNTITLED SERIF/DesktopFonts/UntitledSerif-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Untitled Serif';
+  src: url('/fonts/UNTITLED SERIF-20250821T135306Z-1-001/UNTITLED SERIF/DesktopFonts/UntitledSerif-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "Sackers Gothic", "Untitled Sans", var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif: "Untitled Serif", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-display: "Central Avenue", "Sackers Gothic", sans-serif;
+}
+
+.df-font {
+  font-family: "Sackers Gothic";
+}
+
+.font-central-avenue {
+  font-family: var(--font-central-avenue-bold), "Central Avenue", sans-serif;
+}
+
+.font-sackers-gothic {
+  font-family: var(--font-sackers-light), "Sackers Gothic", sans-serif;
+}
+
+.font-untitled-sans {
+  font-family: var(--font-untitled-sans), "Untitled Sans", sans-serif;
+}
+
+.font-untitled-serif {
+  font-family: var(--font-untitled-serif), "Untitled Serif", serif;
+}
+
+.font-sucker-light {
+  font-family: var(--font-sackers-light), "Sackers Gothic", sans-serif;
+  font-weight: 300;
+}
+
+.font-sucker-heavy {
+  font-family: var(--font-sackers-heavy), "Sackers Gothic", sans-serif;
+  font-weight: 700;
+}
+
+.font-untitled-serif-italic {
+  font-family: var(--font-untitled-serif-italic), "Untitled Serif", serif;
+  font-style: italic;
+}
+
+.input-custom-border {
+  border-bottom: #050505 2px solid;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+body {
+  font-family: var(--font-sackers-light), "Sackers Gothic", sans-serif;
+}
