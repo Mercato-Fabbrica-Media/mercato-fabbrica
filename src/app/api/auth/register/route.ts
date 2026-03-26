@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { db } from "~/server/db";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const ACCOUNT_ID_COOKIE = "rails_account_id";
 
