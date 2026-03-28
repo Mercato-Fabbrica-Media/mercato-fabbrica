@@ -1,25 +1,46 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function Header() {
+  const futureNavItems = ["blockchain", "assistance", "obsessions"];
+  const [firstName, setFirstName] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/account/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { firstName?: string } | null) => {
+        if (data?.firstName) setFirstName(data.firstName);
+      })
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      .catch(() => {});
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 grid w-full items-center border-b border-gray-300 bg-[#eae7e2] px-4 md:px-[72px] py-[10px] md:py-[20px] max-xl:flex xl:grid-cols-3">
+    <header className="sticky top-0 z-50 mx-auto grid w-full max-w-[1440px] items-center border-b border-gray-300 bg-[#eae7e2] px-4 md:px-[72px] py-[10px] md:h-[82px] md:py-0 max-xl:flex xl:grid-cols-3">
       <div className="flex items-center gap-2">
         <Link href="/" className="no-underline">
           <div className="flex flex-col items-center">
             <div className="relative h-[22px] w-[22px] md:h-[30px] md:w-[30px]">
               <Image
-                src="/assets/images/Logo.png"
+                src="/assets/images/HEN_SMALL_RGB.png"
                 alt="Logo"
                 width={50}
                 height={50}
                 className="object-contain"
               />
             </div>
-            <span className="text-[6px] tracking-[1.1px] font-bold text-black md:text-[8px]">
-              MEMBERS
-            </span>
+            {firstName ? (
+              <span className="block text-center text-[6px] font-sackers-gothic tracking-[1.1px] text-black md:text-[8px]">
+                <span className="block">HELLO</span>
+                <span className="block">{firstName.toUpperCase()}</span>
+              </span>
+            ) : (
+              <span className="block text-center text-[6px] font-sackers-gothic tracking-[1.1px] text-black md:text-[8px]">
+                MEMBERS
+              </span>
+            )}
           </div>
         </Link>
       </div>
@@ -59,24 +80,15 @@ export default function Header() {
         </button>
 
         <nav className="items-center gap-5 md:gap-7 hidden lg:flex">
-          <Link
-            href="/blockchain"
-            className="text-[9px] md:text-[11px] text-black hover:opacity-70"
-          >
-            blockchain
-          </Link>
-          <Link
-            href="/assistance"
-            className="text-[9px] md:text-[11px] text-black hover:opacity-70"
-          >
-            assistance
-          </Link>
-          <Link
-            href="/obsessions"
-            className="text-[9px] md:text-[11px] text-black hover:opacity-70"
-          >
-            obsessions
-          </Link>
+          {futureNavItems.map((item) => (
+            <span
+              key={item}
+              aria-disabled="true"
+              className="cursor-default text-[9px] text-black/70 md:text-[11px]"
+            >
+              {item}
+            </span>
+          ))}
         </nav>
 
         <button

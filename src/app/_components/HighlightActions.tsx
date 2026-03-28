@@ -29,34 +29,34 @@ export default function HighlightActions() {
   };
 
   return (
-    <div className="flex items-center gap-2 md:gap-2">
+    <div className="flex items-center gap-2 md:gap-6 lg:gap-[13px]">
       <button
         aria-label="Like this image"
-        className="hover:opacity-60 transition-opacity duration-200 hover:cursor-pointer"
+        className={`transition-opacity duration-200 hover:opacity-60 hover:cursor-pointer ${liked ? "opacity-100" : "opacity-60"}`}
         onClick={handleLike}
       >
         <Image
           src="/assets/images/Heart.svg"
-          alt="Like"
-          width={17}
-          height={16}
-          className={`w-[16px] h-[16px] md:w-[17px] md:h-[16px] ${liked ? "opacity-100" : "opacity-60"}`}
+          alt="Heart"
+          width={37}
+          height={34}
+          className="h-[10px] w-[10px] md:h-[16px] md:w-[16px]"
         />
       </button>
       <button
         aria-label="Share this image"
-        className="relative hover:opacity-60 transition-opacity duration-200 hover:cursor-pointer"
+        className="relative transition-opacity duration-200 hover:opacity-60 hover:cursor-pointer"
         onClick={() => void handleShare()}
       >
         <Image
           src="/assets/images/Share.svg"
           alt="Share"
-          width={16}
-          height={16}
-          className="w-[16px] h-[16px] md:w-[16px] md:h-[16px]"
+          width={35}
+          height={36}
+          className="h-[10px] w-[10px] md:h-[16px] md:w-[16px]"
         />
         {shared && (
-          <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] text-black whitespace-nowrap">
+          <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] text-white whitespace-nowrap">
             Link copied
           </span>
         )}

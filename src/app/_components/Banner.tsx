@@ -57,8 +57,8 @@ export default function Banner({
           />
         </div>}
 
-        <div className="absolute inset-0 flex top-0 items-start md:items-center justify-center z-10 px-4">
-          <div className="text-center relative top-[30px] md:-top-[12px] max-w-[230px] md:max-w-[520px]">
+        <div className="absolute inset-0 flex top-0 items-start justify-center z-10 px-4">
+          <div className="text-center relative top-[30px] lg:top-[78px] max-w-[230px] md:max-w-[520px]">
             {children}
           </div>
         </div>
@@ -75,14 +75,14 @@ export default function Banner({
         </div>
       )}
 
-      {highlight && (
-        <div className="h-[20px] md:h-[30px] absolute bottom-0 left-0 w-full flex items-center justify-between px-4 md:px-[72px] py-0 bg-[#eae7e2] bg-opacity-95 z-20 highlight-container">
-          <div className="text-black text-justify font-untitled-serif-italic text-xs leading-normal tracking-[0.004px] whitespace-nowrap overflow-hidden text-ellipsis text-[7px] antialiased md:text-[14px]">
-            {highlight}
-          </div>
+      <div className="h-[20px] md:h-[30px] absolute bottom-0 left-0 w-full flex items-center justify-between px-4 md:px-[72px] py-0 bg-[#eae7e2] bg-opacity-95 z-20 highlight-container">
+        <div className="text-black text-justify font-untitled-serif-italic text-xs leading-normal tracking-[0.004px] whitespace-nowrap overflow-hidden text-ellipsis text-[7px] antialiased md:text-[14px]">
+          {highlight}
+        </div>
+        <div className="lg:absolute lg:left-[1323px]">
           <HighlightActions />
         </div>
-      )}
+      </div>
     </div>
   );
 }

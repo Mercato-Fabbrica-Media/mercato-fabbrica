@@ -18,10 +18,10 @@ export default async function QuestionPage() {
     <LoginGate>
       <Banner
         mainImageSrc="/assets/images/question3-main.png"
-        highlight={section.disclaimer ?? undefined}
+        highlight={`Artist Highlight: Pierre Bergian, The Abstract Painting, 2019  (oil on canvas)`}
       >
         <div className="tracking-[0.01em] leading-[1.08] font-central-avenue text-center text-white uppercase drop-shadow-lg text-[32px] lg:text-[72px]">
-          <div>{section.title?.trim().toUpperCase() ?? "QUESTIONNAIRE"}</div>
+          <div>ARTISTIC<br/>PREFERENCES<br/><span className="normal-case">and</span> CREATIVE<br/>ENGAGEMENT</div>
         </div>
       </Banner>
       <QuestionComponent

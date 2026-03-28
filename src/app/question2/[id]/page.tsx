@@ -1,7 +1,7 @@
 import Banner from "~/app/_components/Banner";
 import Question from "~/app/_components/Question";
 import LoginGate from "~/app/_components/LoginGate";
-import { getQuestionWithNavigation } from "~/server/queries/questionnaire";
+import { getQuestionWithNavigation, globalToDbId } from "~/server/queries/questionnaire";
 import { getCurrentAccountId } from "~/server/auth/session";
 import { getQuestionVisual } from "~/server/questionVisuals";
 import { notFound } from "next/navigation";
@@ -15,11 +15,17 @@ export default async function DynamicQuestion2Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const questionId = Number.parseInt(id, 10);
+  const globalNum = Number.parseInt(id, 10);
 
-  if (Number.isNaN(questionId)) {
+  if (Number.isNaN(globalNum)) {
     notFound();
   }
+
+  const dbId = await globalToDbId(globalNum);
+  if (!dbId) {
+    notFound();
+  }
+  const questionId = Number(dbId);
 
   const accountId = (await getCurrentAccountId()) ?? undefined;
 
@@ -51,7 +57,8 @@ export default async function DynamicQuestion2Page({
         alt={visuals.alt}
         currentQuestion={questionData.progress.currentGlobal}
         totalQuestions={questionData.progress.totalGlobal}
-        highlight={visuals.caption ?? questionData.section.disclaimer}
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        highlight={visuals.caption || questionData.section.disclaimer}
       >
         <div className="font-central-avenue text-center text-white uppercase drop-shadow-lg">
           <div className="mx-auto max-w-[230px] md:max-w-[520px] text-[32px] leading-[38px] font-normal tracking-wide max-sm:top-0 md:text-[72px] md:leading-[86px]">

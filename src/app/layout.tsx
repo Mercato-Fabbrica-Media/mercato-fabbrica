@@ -9,7 +9,11 @@ import Header from "~/app/_components/Header";
 export const metadata: Metadata = {
   title: "Mercato Fabbrica",
   description: "WE EAT,then WE DO EVERYTHING ELSE",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: {
+    icon: [{ url: "/favicon.ico" }],
+    shortcut: ["/favicon.ico"],
+    apple: [{ url: "/apple-touch-icon.png", type: "image/png", sizes: "180x180" }],
+  },
 };
 
 const centralAvenueBold = localFont({

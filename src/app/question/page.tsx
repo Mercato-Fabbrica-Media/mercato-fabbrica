@@ -1,5 +1,6 @@
 import Questionaire from "~/app/_components/Questionnaire";
 import LoginGate from "~/app/_components/LoginGate";
+import TrackPageView from "~/app/_components/TrackPageView";
 import { getQuestionnaireLanding } from "~/server/queries/questionnaire";
 import { notFound } from "next/navigation";
 
@@ -15,6 +16,7 @@ export default async function QuestionairePage() {
 
   return (
     <LoginGate>
+      <TrackPageView eventName="questionnaire_started" questionnaireId={QUESTIONNAIRE_ID} />
       <Questionaire
         title={questionnaire.title?.toUpperCase() ?? "QUESTIONNAIRE"}
         subtitle={questionnaire.ctaText?.toUpperCase() ?? "QUESTIONNAIRE"}
