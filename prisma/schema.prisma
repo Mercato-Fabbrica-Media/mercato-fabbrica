@@ -7,72 +7,7 @@ generator client {
 
 datasource db {
     provider = "postgresql"
-    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
     url      = env("DATABASE_URL")
-  // provider = "mysql"
-  // url      = env("DATABASE_URL")
-}
-
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
-}
-
-// Necessary for Next auth
-model Account {
-    id                       String  @id @default(cuid())
-    userId                   String
-    type                     String
-    provider                 String
-    providerAccountId        String
-    refresh_token            String? // @db.Text
-    access_token             String? // @db.Text
-    expires_at               Int?
-    token_type               String?
-    scope                    String?
-    id_token                 String? // @db.Text
-    session_state            String?
-    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    refresh_token_expires_in Int?
-
-    @@unique([provider, providerAccountId])
-}
-
-model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    posts         Post[]
-}
-
-model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
-
-    @@unique([identifier, token])
 }
 
 model Questionnaire {
@@ -169,4 +104,43 @@ model Response {
 
   @@index([questionId], map: "index_responses_on_question_id")
   @@map("responses")
+}
+
+model AnalyticsEvent {
+  id               BigInt   @id @default(autoincrement())
+  accountId        Int?     @map("account_id")
+  sessionId        String?  @map("session_id") @db.VarChar(64)
+  eventName        String   @map("event_name") @db.VarChar(100)
+  questionnaireId  BigInt?  @map("questionnaire_id")
+  questionId       BigInt?  @map("question_id")
+  stepIndex        Int?     @map("step_index")
+  route            String?  @db.VarChar(255)
+  metadata         Json?
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+
+  @@index([eventName], map: "index_analytics_events_on_event_name")
+  @@index([accountId], map: "index_analytics_events_on_account_id")
+  @@index([createdAt], map: "index_analytics_events_on_created_at")
+  @@map("analytics_events")
+}
+
+model AriaProfileRecord {
+  id                     BigInt   @id @default(autoincrement())
+  profileId              String   @unique @map("profile_id") @db.Uuid
+  accountId              Int      @map("account_id")
+  profileVersion         String   @map("profile_version") @db.VarChar(10)
+  compilerVersion        String   @map("compiler_version") @db.VarChar(20)
+  questionnaireVersion   String   @map("questionnaire_version") @db.VarChar(20)
+  primaryArchetype       String?  @map("primary_archetype") @db.VarChar(50)
+  secondaryArchetype     String?  @map("secondary_archetype") @db.VarChar(50)
+  confidenceScore        Float    @map("confidence_score")
+  completenessScore      Float    @map("completeness_score")
+  profileData            Json     @map("profile_data")
+  state                  String   @default("active") @db.VarChar(20)
+  createdAt              DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt              DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@index([accountId], map: "index_aria_profiles_on_account_id")
+  @@index([state], map: "index_aria_profiles_on_state")
+  @@map("aria_profiles")
 }

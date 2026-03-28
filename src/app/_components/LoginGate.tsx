@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { track } from "~/lib/analytics";
 
 interface LoginGateProps {
   children: React.ReactNode;
@@ -19,10 +20,12 @@ export default function LoginGate({ children }: LoginGateProps) {
           sessionStorage.setItem("isLogin", "true");
           setCanRender(true);
         } else {
+          track("auth_check_failed", { metadata: { status: res.status } });
           sessionStorage.removeItem("isLogin");
           router.replace("/login");
         }
       } catch {
+        track("auth_check_failed", { metadata: { error: "network" } });
         sessionStorage.removeItem("isLogin");
         router.replace("/login");
       }

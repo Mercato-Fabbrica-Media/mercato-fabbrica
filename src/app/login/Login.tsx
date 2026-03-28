@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { track } from "~/lib/analytics";
 
 interface LoginResponse {
   error?: string;
@@ -11,6 +12,8 @@ export default function Login() {
   const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+
+  useEffect(() => { track("login_viewed"); }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -35,9 +38,12 @@ export default function Login() {
         throw new Error("Invalid login response");
       }
 
+      track("login_success");
       sessionStorage.setItem("isLogin", "true");
       router.push("/question");
     } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unexpected error occurred";
+      track("login_failed", { metadata: { error: msg } });
       if (err instanceof Error) setError(err.message);
       else setError("Unexpected error occurred");
     }

@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { track } from "~/lib/analytics";
 
 interface AuthResponse {
   error?: string;
@@ -18,6 +19,8 @@ const Register = () => {
     newsletter: false,
   });
   const [error, setError] = useState("");
+
+  useEffect(() => { track("register_viewed"); }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -51,9 +54,12 @@ const Register = () => {
         throw new Error("Invalid response");
       }
 
+      track("register_success");
       sessionStorage.setItem("isLogin", "true");
       router.push("/question");
     } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unexpected error occurred";
+      track("register_failed", { metadata: { error: msg } });
       if (err instanceof Error) setError(err.message);
       else setError("Unexpected error occurred");
     }
