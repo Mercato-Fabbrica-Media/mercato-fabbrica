@@ -96,8 +96,6 @@ const untitledSerifItalic = localFont({
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  // const _session = await auth();
-
   return (
     <html
       lang="en"
