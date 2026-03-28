@@ -1,7 +1,8 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { track } from "~/lib/analytics";
 
 interface QuestionProps {
   questionId: number;
@@ -46,6 +47,7 @@ export default function Question({
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const router = useRouter();
+  const viewedAtRef = useRef(Date.now());
 
   useEffect(() => {
     if (!initialChoice) {
@@ -62,6 +64,11 @@ export default function Question({
   useEffect(() => {
     setShareMoreText(initialShareMore ?? "");
   }, [initialShareMore]);
+
+  useEffect(() => {
+    viewedAtRef.current = Date.now();
+    track("question_viewed", { questionId, stepIndex: currentQuestion });
+  }, [questionId, currentQuestion]);
 
   const persistResponse = useCallback(
     async (override?: { response?: number | null; shareMore?: string }) => {
@@ -95,16 +102,20 @@ export default function Question({
         }
         if (!res.ok) {
           setSaveError(true);
+          track("response_save_failed", { questionId, metadata: { status: res.status } });
           console.error("Failed to save response", await res.text());
+        } else {
+          track("response_saved", { questionId, stepIndex: currentQuestion });
         }
       } catch (error) {
         setSaveError(true);
+        track("response_save_failed", { questionId, metadata: { error: "network" } });
         console.error("Error saving response", error);
       } finally {
         setIsSaving(false);
       }
     },
-    [questionId, options, selectedOption, shareMoreText, router],
+    [questionId, options, selectedOption, shareMoreText, router, currentQuestion],
   );
 
   const handleOptionToggle = (index: number) => {
@@ -129,6 +140,12 @@ export default function Question({
 
   const handleNextClick = async () => {
     await persistResponse();
+    const timeOnQuestion = Date.now() - viewedAtRef.current;
+    track("question_navigated", {
+      questionId,
+      stepIndex: currentQuestion,
+      metadata: { direction: "next", timeOnQuestionMs: timeOnQuestion },
+    });
     if (nextHref) {
       router.push(nextHref);
       return;
@@ -156,7 +173,7 @@ export default function Question({
   const inputClasses = `font-sackers-gothic w-full border-0 border-b-2 md:border-b-2 border-black bg-transparent md:pb-1 md:text-[20px] font-light tracking-[0.02em] text-black lowercase placeholder-black focus:border-black focus:outline-none text-[10px] antialiased`
 
   return (
-    <div className="bg-[#e8e5e0] md:px-16 md:py-16 md:pt-[42px] px-4 py-4 pt-5 md:min-h-[1350px]">
+    <div className="bg-[#e8e5e0] md:px-[72px] md:pb-16 md:pt-[42px] px-4 py-4 pt-5 md:min-h-[1350px]">
       <div className="mx-auto">
         {saveError && (
           <div className="mb-4 text-red-600 text-[10px] md:text-[14px] font-untitled-sans">

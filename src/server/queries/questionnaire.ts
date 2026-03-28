@@ -27,6 +27,25 @@ function toHtmlLines(text?: string | null): string {
     .join("");
 }
 
+// Map global question number (1-33) to DB ID and vice versa
+async function getAllQuestionIds(): Promise<bigint[]> {
+  const all = await db.question.findMany({
+    select: { id: true },
+    orderBy: { id: "asc" },
+  });
+  return all.map((q) => q.id);
+}
+
+export async function globalToDbId(globalNum: number): Promise<bigint | null> {
+  const ids = await getAllQuestionIds();
+  return ids[globalNum - 1] ?? null;
+}
+
+function dbIdToGlobal(dbId: bigint, allIds: bigint[]): number {
+  const idx = allIds.findIndex((id) => id === dbId);
+  return idx >= 0 ? idx + 1 : 0;
+}
+
 function normalizeOption(line: string): string {
   const trimmed = line.trim().replace(/^[-•]\s*/, "");
   if (!trimmed || trimmed === "---") return "";
@@ -119,13 +138,19 @@ export async function getQuestionnaireSectionSummary(questionnaireId: number) {
   const firstSectionQuestion = section.sectionQuestions[0];
   const firstQuestion = firstSectionQuestion?.questions[0];
 
+  let firstQuestionId: number | null = null;
+  if (firstQuestion) {
+    const allIds = await getAllQuestionIds();
+    firstQuestionId = dbIdToGlobal(firstQuestion.id, allIds);
+  }
+
   return {
     id: Number(section.id),
     title: section.title,
     description: section.description,
     ctaText: section.ctaText,
     disclaimer: section.disclaimer,
-    firstQuestionId: firstQuestion ? Number(firstQuestion.id) : null,
+    firstQuestionId,
   };
 }
 
@@ -236,6 +261,15 @@ export async function getQuestionWithNavigation(
   const localPosition = localIndex >= 0 ? localIndex + 1 : null;
   const localTotal = localIds.length;
 
+  // Build global position mapping for navigation URLs
+  const allIds = await getAllQuestionIds();
+  const prevGlobal = previousQuestion
+    ? dbIdToGlobal(previousQuestion.id, allIds)
+    : 0;
+  const nextGlobal = nextQuestion
+    ? dbIdToGlobal(nextQuestion.id, allIds)
+    : 0;
+
   return {
     question: {
       id: Number(question.id),
@@ -246,7 +280,7 @@ export async function getQuestionWithNavigation(
     section: {
       id: Number(section.id),
       title: section.title ?? undefined,
-      descriptionHtml: toHtmlLines(section.title ?? ""),
+      descriptionHtml: toHtmlLines(section.description ?? ""),
       disclaimer: section.disclaimer ?? questionnaire.disclaimer ?? undefined,
     },
     prompt: {
@@ -261,11 +295,11 @@ export async function getQuestionWithNavigation(
         }
       : null,
     navigation: {
-      previousHref: previousQuestion
-        ? `/${routePrefix}/${Number(previousQuestion.id)}`
+      previousHref: prevGlobal
+        ? `/${routePrefix}/${prevGlobal}`
         : navigationFallback.previous,
-      nextHref: nextQuestion
-        ? `/${routePrefix}/${Number(nextQuestion.id)}`
+      nextHref: nextGlobal
+        ? `/${routePrefix}/${nextGlobal}`
         : navigationFallback.next,
     },
     progress: {

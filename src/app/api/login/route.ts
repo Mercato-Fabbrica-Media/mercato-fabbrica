@@ -77,13 +77,14 @@ export async function POST(req: Request) {
     sameSite: 'lax' as const,
     secure: process.env.NODE_ENV === 'production',
     path: '/',
-    maxAge: 60 * 60,
+    maxAge: 60 * 60 * 24, // 24 hours — match auth routes
   };
 
   if (!ok) {
     const body = await upstream.text();
+    console.error(`[login] upstream ${upstream.status}:`, body.slice(0, 400));
     const errorRes = NextResponse.json(
-      { error: 'Login failed', status: upstream.status, body: body.slice(0, 400) },
+      { error: 'Login failed' },
       { status: 401 },
     );
 

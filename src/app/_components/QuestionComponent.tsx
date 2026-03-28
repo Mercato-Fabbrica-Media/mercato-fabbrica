@@ -20,7 +20,7 @@ export default function QuestionComponent({
 }: QuestionComponentProps) {
   return (
     <div className="flex max-sm:h-[calc(100vh-343px)] md:min-h-[1350px] flex-col bg-[#e8e5e0]">
-      <div className="flex-1 md:px-16 py-5 md:py-9 px-4">
+      <div className="flex-1 md:px-[72px] py-5 md:py-9 px-4">
         <div className="md:mb-[95px] mb-16">
           <p className="text-[13px] leading-[18px] md:text-[26px] md:leading-[36px] lowercase text-justify font-sucker md:font-bold antialiased text-black">
             {description}
@@ -66,7 +66,7 @@ export default function QuestionComponent({
         </div>
       </div>
 
-      <div className="md:px-16 md:py-8 pt-0 pb-8 px-4 mt-auto">
+      <div className="md:px-[72px] md:py-8 pt-0 pb-8 px-4 mt-auto">
         <div className="mx-auto">
           <p className="md:text-[21px] text-[8px] leading-[18px] md:leading-[27px] text-justify font-normal font-untitled-serif text-[#0A0909] antialiased">
             {privacyNotice}
