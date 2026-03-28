@@ -43,9 +43,10 @@ function flush() {
   const batch = queue.splice(0, queue.length);
 
   const body = JSON.stringify(batch.length === 1 ? batch[0] : batch);
+  const blob = new Blob([body], { type: "application/json" });
 
   if (typeof navigator !== "undefined" && navigator.sendBeacon) {
-    navigator.sendBeacon("/api/analytics", body);
+    navigator.sendBeacon("/api/analytics", blob);
   } else {
     void fetch("/api/analytics", {
       method: "POST",

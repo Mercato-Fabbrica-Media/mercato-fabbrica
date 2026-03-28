@@ -5,6 +5,28 @@ import { db } from "~/server/db";
 
 const ACCOUNT_ID_COOKIE = "rails_account_id";
 
+const ALLOWED_EVENTS = new Set([
+  // Auth
+  "login_viewed",
+  "login_success",
+  "login_failed",
+  "register_viewed",
+  "register_success",
+  "register_failed",
+  "auth_check_failed",
+  // Questionnaire
+  "questionnaire_started",
+  "questionnaire_completed",
+  "question_viewed",
+  "question_navigated",
+  "response_saved",
+  "response_save_failed",
+  // ARIA
+  "aria_profile_compile_started",
+  "aria_profile_compile_succeeded",
+  "aria_profile_compile_failed",
+]);
+
 export const dynamic = "force-dynamic";
 
 interface EventPayload {
@@ -35,7 +57,7 @@ export async function POST(req: Request) {
     : null;
 
   const rows = events
-    .filter((e) => e.eventName && typeof e.eventName === "string")
+    .filter((e) => e.eventName && typeof e.eventName === "string" && ALLOWED_EVENTS.has(e.eventName))
     .map((e) => ({
       accountId: accountId && !Number.isNaN(accountId) ? accountId : null,
       sessionId: e.sessionId ?? null,
